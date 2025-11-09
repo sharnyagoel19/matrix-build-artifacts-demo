@@ -12,30 +12,25 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [16, 18, 20]
-        exclude:
-          - os: macos-latest
-            node-version: 20
-        include:
-          - os: ubuntu-latest
-            node-version: 22
+        version: [16, 18, 20]
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: matrix-291237a
-        run: echo "Building for OS=${{ matrix.os }}, Node=${{ matrix.node-version }}"
+        run: echo "Building for OS=${{ matrix.os }} with Node version ${{ matrix.version }}"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.version }}
 
       - name: Generate build artifact
-        run: echo "Build output for OS=${{ matrix.os }}, Node=${{ matrix.node-version }}" > output.txt
+        run: echo "Build output for OS=${{ matrix.os }} and Node version ${{ matrix.version }}" > output.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-291237a-${{ matrix.os }}-node${{ matrix.node-version }}
+          name: build-291237a-${{ matrix.os }}-v${{ matrix.version }}
           path: output.txt
